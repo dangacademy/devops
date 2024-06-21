@@ -1,0 +1,30 @@
+version: '3.8'
+services:
+  jenkins : 
+    build :
+      context : .
+      dockerfile : DockerfileDindWithShell
+    container_name: dc-jenkins-dind-shell
+    user: root
+    restart: on-failure
+    privileged: true
+    volumes :
+      - ../../devops/jenkins-misc/src/:/var/src
+      - /var/run/docker.sock:/var/run/docker.sock
+      - jenkins_home:/var/jenkins_home
+      - jenkins-docker-certs:/certs/client:ro
+    ports :
+      - 50000:50000
+      - 1212:8080
+    working_dir: /var/jenkins_home
+    environment:
+      - TZ=Asia/Kolkata
+#    environment:  # Set environment variables
+#       By Pass setup wizard
+#      - JAVA_OPTS=-Djenkins.install.runSetupWizard=false
+
+volumes:
+  jenkins_home:
+    name: jenkins_home
+  jenkins-docker-certs:
+    name: jenkins-docker-certs

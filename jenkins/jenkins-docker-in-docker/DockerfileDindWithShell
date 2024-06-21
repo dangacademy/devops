@@ -1,0 +1,9 @@
+FROM jenkins/jenkins:lts-jdk17
+USER root
+RUN apt-get update && \
+    apt-get install -y maven && \
+    apt-get install vim -y 
+#    rm -rf /var/lib/apt/lists/*
+RUN curl https://get.docker.com/ > dockerinstall && chmod 777 dockerinstall && ./dockerinstall
+USER jenkins
+RUN jenkins-plugin-cli --plugins "blueocean docker-workflow"
